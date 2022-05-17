@@ -1,0 +1,145 @@
+
+Fitting Data from mtcars
+========================================================
+author: Igor Gamayun
+date: 16.05.2022
+autosize: true
+transition: rotate
+font-family: 'Helvetica'
+
+
+What does this App do
+========================================================
+
+This App uses mtcars daraset to create a fit between variables in mtcars and then predict a value of a chosen variable.  
+The X and Y variables can be chosen from pop-up menu.  
+```{r, echo=FALSE}
+
+names(mtcars)
+```
+
+
+
+
+
+Example: Y=hp plotted versus X=mpg
+========================================================
+```{r, echo=FALSE}
+library(ggplot2)
+pL<-ggplot(data=mtcars, aes(x=mpg,y=hp))+geom_point(color='red')+labs(title='data from mtcars',x="mpg", y="hp")
+print(pL)
+``` 
+***
+Fitting can be done with: 
+
+- Linear fit
+- Second degree polynomial fit
+- Third degree polynomial fit
+- Exponential fit
+
+
+
+
+Example: 
+========================================================
+
+Third degree polynomial fitting
+```{r, echo=FALSE}
+library(dplyr)
+data1=mtcars
+
+    x <- data1[,"mpg"]
+    y<- data1[,"hp"]
+fit <- lm(y~poly(x,3,raw=TRUE), data=data1)
+      data1<-mutate(data1,my_model = predict(fit))
+      space=data.frame(x=seq(min(x),max(x),length.out=100))
+      data2<-data.frame(my_model=predict(object = fit, newdata = space),x=space)
+      
+ pL<-ggplot(data=data1, aes(x=x,y=y))+geom_point(color='red')+labs(title='data from mtcars',x="mpg", y="hp")
+ pL<-pL+geom_line(data=data2,aes(x,my_model))
+ print(pL)
+ paste("R^2=",as.character(round(summary(fit)$r.squared, digits=4)))
+
+```
+***
+Exponential fitting
+```{r, echo=FALSE}
+library(dplyr)
+data1=mtcars
+
+    x <- data1[,"mpg"]
+    y<- data1[,"hp"]
+fit <- lm(y~log(x), data=data1)
+      data1<-mutate(data1,my_model = predict(fit))
+      space=data.frame(x=seq(min(x),max(x),length.out=100))
+      data2<-data.frame(my_model=predict(object = fit, newdata = space),x=space)
+      
+ pL<-ggplot(data=data1, aes(x=x,y=y))+geom_point(color='red')+labs(title='data from mtcars',x="mpg", y="hp")
+ pL<-pL+geom_line(data=data2,aes(x,my_model))
+ print(pL)
+ paste("R^2=",as.character(round(summary(fit)$r.squared, digits=4)))
+
+```
+
+
+Value prediction of the chosen fitting
+========================================================
+
+prediction of the hp value for mpg=16
+
+```{r, echo=FALSE}
+data1=mtcars
+
+    x <- data1[,"mpg"]
+    y<- data1[,"hp"]
+    
+fit <- lm(y~poly(x,3,raw=TRUE), data=data1)
+      data1<-mutate(data1,my_model = predict(fit))
+      space=data.frame(x=seq(min(x),max(x),length.out=100))
+      data2<-data.frame(my_model=predict(object = fit, newdata = space),x=space)
+      
+ pL<-ggplot(data=data1, aes(x=x,y=y))+geom_point(color='red')+labs(title='data from mtcars',x="mpg", y="hp")
+ 
+ pL<-pL+geom_line(data=data2,aes(x,my_model))
+
+ 
+
+datPR<-data.frame(x1=as.numeric(16),y1=predict(object=fit,newdata=data.frame(x=as.numeric(16))))
+   
+  pL<-pL+geom_vline(xintercept=as.numeric(16),lty=2)+geom_point(data=datPR,aes(x1,y1), col='blue') 
+   print(pL)
+
+```
+***
+```{r, echo=FALSE}
+data1=mtcars
+
+    x <- data1[,"mpg"]
+    y<- data1[,"hp"]
+    
+fit <- lm(y~poly(x,3,raw=TRUE), data=data1)
+      data1<-mutate(data1,my_model = predict(fit))
+      space=data.frame(x=seq(min(x),max(x),length.out=100))
+      data2<-data.frame(my_model=predict(object = fit, newdata = space),x=space)
+      
+ pL<-ggplot(data=data1, aes(x=x,y=y))+geom_point(color='red')+labs(title='data from mtcars',x="mpg", y="hp")
+ 
+ pL<-pL+geom_line(data=data2,aes(x,my_model))
+
+ 
+
+datPR<-data.frame(x1=as.numeric(16),y1=predict(object=fit,newdata=data.frame(x=as.numeric(16))))
+   
+
+
+    paste("R^2=",as.character(round(summary(fit)$r.squared, digits=4)))
+
+ paste("predicted value of","hp","is",round(predict(object=fit,newdata=data.frame(x=as.numeric(16))),digits=2)) 
+```
+
+Conclusion
+- choose X and Y from mtcars
+- try to use different fit methods 
+- choose one with the highest R^2
+- enter the value either with a slide or in a text box
+- the App will predict the output value

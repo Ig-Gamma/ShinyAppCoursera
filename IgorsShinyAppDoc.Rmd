@@ -1,0 +1,43 @@
+---
+title: "IgorsShinyApp"
+author: "Igor Gamayun"
+date: "5/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+The App uses mtcars dataset to create a fit between variables in mtcars data set and then predicts the value using chosen fitting method.
+
+## Usage
+you can choose X and Y variables from popup menus. 
+the App will build a graph Y vs. X varaible.
+
+
+checkbox "fit" opens a popup menu for fitting methods
+
+Fitting can be done with: 
+
+- Linear fit (linear)
+- Second degree polynomial fit (poly2)
+- Third degree polynomial fit (poly3)
+- Exponential fit (exp)
+
+As a characteristic of fitting, R^2 will be calculated and put under the graph
+
+checkbox "predict" opens a popup menu for entering the predictor
+
+It can be done in two ways:
+
+- enter with value  
+- enter with slider
+
+"enter with value" opens a text box, where one can enter a predictor's value.
+"enter with slider" creates a slider, where one can choose a value between the minimum and maximum of X axis values.
+
+Finally, the App will calculate the prediction and print it.
+
+
